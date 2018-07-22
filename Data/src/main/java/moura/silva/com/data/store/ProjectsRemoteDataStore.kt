@@ -7,7 +7,8 @@ import moura.silva.com.data.repository.ProjectsDataStore
 import moura.silva.com.data.repository.ProjectsRemote
 import javax.inject.Inject
 
-class ProjectRemoteDataStore @Inject constructor(
+
+open class ProjectsRemoteDataStore @Inject constructor(
         private val projectsRemote: ProjectsRemote
 ) : ProjectsDataStore{
 

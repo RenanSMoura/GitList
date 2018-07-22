@@ -7,15 +7,19 @@ import moura.silva.com.data.repository.ProjectsCache
 import moura.silva.com.data.repository.ProjectsDataStore
 import javax.inject.Inject
 
-class ProjectsCacheDataStore @Inject constructor(private val projectsCache: ProjectsCache) :
+open class ProjectsCacheDataStore @Inject constructor(private val projectsCache: ProjectsCache) :
         ProjectsDataStore{
+
     override fun getProjects(): Observable<List<ProjectEntity>> {
         return projectsCache.getProjects()
     }
 
     override fun saveProjects(projects: List<ProjectEntity>): Completable {
+
+        //add this lather
+        //   .andThen(projectsCache.setLastCacheTime(System.currentTimeMillis()))
         return  projectsCache.saveProjects(projects)
-                .andThen(projectsCache.setLastCacheTime(System.currentTimeMillis()))
+
     }
 
     override fun clearProjects(): Completable {

@@ -13,8 +13,7 @@ import org.mockito.MockitoAnnotations
 
 class BookmarkProjectTest{
     private lateinit var bookmarkProject: BookmarkProject
-    @Mock
-    lateinit var projectsRepository: ProjectRepository
+    @Mock lateinit var projectsRepository: ProjectRepository
     @Mock lateinit var postExecutionThread: PostExecutionThread
 
     @Before
