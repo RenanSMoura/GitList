@@ -8,6 +8,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import moura.silva.com.data.model.ProjectEntity
 import moura.silva.com.data.repository.ProjectsCache
+import moura.silva.com.data.test.factory.DataFactory
 import moura.silva.com.data.test.factory.ProjectFactory
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -52,9 +53,74 @@ class ProjectsCacheDataStoreTest{
     fun saveProjectsCallCache(){
         val data = listOf(ProjectFactory.makeProjectEntity())
         stubProjectsSave(Completable.complete())
+        stubProjectsCacheSetLastCacheTime(Completable.complete())
         store.saveProjects(data).test()
         verify(cache).saveProjects(data)
     }
+
+    @Test
+    fun clearProjectsCompletes(){
+        stubProjectClearProjects(Completable.complete())
+        val testCompletable = store.clearProjects().test()
+        testCompletable.assertComplete()
+    }
+
+    @Test
+    fun clearProjectsCallsCacheStore(){
+        stubProjectClearProjects(Completable.complete())
+        store.clearProjects().test()
+        verify(cache).clearProjects()
+    }
+
+    @Test
+    fun getBookmarkedProjectsCompletes(){
+        stubGetBookmarkedProjects(Observable.just(listOf(ProjectFactory.makeProjectEntity())))
+        store.getBookmarkedProjects().test().assertComplete()
+    }
+
+    @Test
+    fun getBookmarkedProjectsCallsCacheStore(){
+        stubGetBookmarkedProjects(Observable.just(listOf(ProjectFactory.makeProjectEntity())))
+        store.getBookmarkedProjects().test()
+        verify(cache).getBookmarkedProjects()
+    }
+
+    @Test
+    fun getBookmarkedProjectsReturnData(){
+        val data = listOf(ProjectFactory.makeProjectEntity())
+        stubGetBookmarkedProjects(Observable.just(data))
+        val testObeserver = store.getBookmarkedProjects().test()
+        testObeserver.assertValue(data)
+    }
+
+    @Test
+    fun setProjectAsBookmardkedCompletes(){
+        stubGetProjectsCacheSetProjectAsBookmarked(Completable.complete())
+        store.setProjectAsBookmarked(DataFactory.randomString()).test().assertComplete()
+    }
+
+    @Test
+    fun setProjectAsBookmardkedCallsCache(){
+        val projectId = DataFactory.randomString()
+        stubGetProjectsCacheSetProjectAsBookmarked(Completable.complete())
+        store.setProjectAsBookmarked(projectId).test().assertComplete()
+        verify(cache).setProjectAsBookmarked(projectId)
+    }
+
+    @Test
+    fun setProjectAsNotBookmardkedCompletes(){
+        stubGetProjectsCacheSetProjectAsNotBookmarked(Completable.complete())
+        store.setProjectAsNotBookmarked(DataFactory.randomString()).test().assertComplete()
+    }
+
+    @Test
+    fun setProjectAsNotBookmardkedCallsCache(){
+        val projectId = DataFactory.randomString()
+        stubGetProjectsCacheSetProjectAsNotBookmarked(Completable.complete())
+        store.setProjectAsNotBookmarked(projectId).test().assertComplete()
+        verify(cache).setProjectAsNotBookmarked(projectId)
+    }
+
 
     private fun stubProjectsCacheGetProjects(observable : Observable<List<ProjectEntity>> ){
         whenever(cache.getProjects()).thenReturn(observable)
@@ -64,4 +130,23 @@ class ProjectsCacheDataStoreTest{
         whenever(cache.saveProjects(any())).thenReturn(complete)
     }
 
+    private fun stubProjectClearProjects(complete: Completable){
+        whenever(cache.clearProjects()).thenReturn(complete)
+    }
+
+    private fun stubGetBookmarkedProjects(observable: Observable<List<ProjectEntity>>){
+        whenever(cache.getBookmarkedProjects()).thenReturn(observable)
+    }
+
+    private fun stubGetProjectsCacheSetProjectAsBookmarked(completable: Completable){
+        whenever(cache.setProjectAsBookmarked(any())).thenReturn(completable)
+    }
+
+    private fun stubGetProjectsCacheSetProjectAsNotBookmarked(completable: Completable){
+        whenever(cache.setProjectAsNotBookmarked(any())).thenReturn(completable)
+    }
+
+    private fun stubProjectsCacheSetLastCacheTime(completable: Completable){
+        whenever(cache.setLastCacheTime(any())).thenReturn(completable)
+    }
 }
