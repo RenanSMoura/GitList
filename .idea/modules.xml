@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Data/Data.iml" filepath="$PROJECT_DIR$/.idea/modules/Data/Data.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Domain/Domain.iml" filepath="$PROJECT_DIR$/.idea/modules/Domain/Domain.iml" />
       <module fileurl="file://$PROJECT_DIR$/GitHubCasterIo.iml" filepath="$PROJECT_DIR$/GitHubCasterIo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Remote/Remote.iml" filepath="$PROJECT_DIR$/.idea/modules/Remote/Remote.iml" />
     </modules>
   </component>
 </project>
