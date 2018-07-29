@@ -45,6 +45,7 @@ class ProjectsCacheDataStoreTest{
     @Test
     fun saveProjectsCompletes(){
         stubProjectsSave(Completable.complete())
+        stubProjectsCacheSetLastCacheTime(Completable.complete())
         val testCompletable = store.saveProjects(listOf(ProjectFactory.makeProjectEntity())).test()
         testCompletable.assertComplete()
     }
