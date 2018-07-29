@@ -15,7 +15,7 @@ class ProjectsRemoteImpl @Inject constructor(
         return gitHubTrendingService.searchRepository(
                 "language:kotlin", "start", "desc")
                 .map {
-                    it.iems.map {
+                    it.items.map {
                         mapper.mapFromModel(it)
                     }
                 }

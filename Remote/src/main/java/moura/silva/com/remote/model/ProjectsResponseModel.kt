@@ -1,3 +1,3 @@
 package moura.silva.com.remote.model
 
-class ProjectsResponseModel(val iems: List<ProjectModel>)
+class ProjectsResponseModel(val items: List<ProjectModel>)
