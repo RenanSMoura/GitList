@@ -32,7 +32,7 @@ class ProjectCacheImpl @Inject constructor(
     }
 
     override fun getProjects(): Observable<List<ProjectEntity>> {
-        return projectsDatabase.cachedProjectsDao().getBookmarkedProjects().toObservable()
+        return projectsDatabase.cachedProjectsDao().getProjects().toObservable()
                 .map {
                     it.map {
                         mapper.mapFromCached(it)
@@ -70,15 +70,18 @@ class ProjectCacheImpl @Inject constructor(
 
     override fun setLastCacheTime(lastCache: Long): Completable {
         return Completable.defer {
-            projectsDatabase.configDao().insertConfig(Config("1",lastCache))
+            projectsDatabase.configDao().insertConfig(Config(lastCacheTime = lastCache))
             Completable.complete()
         }
     }
 
     override fun isProjectsCacheExpired(): Single<Boolean> {
-        val currentTime =System.currentTimeMillis()
+        val currentTime = System.currentTimeMillis()
         val expirationTime = (60 * 60 * 1000).toLong()
-        return projectsDatabase.configDao().getConfig().single(Config("1",lastCacheTime =  0))
-                .map { currentTime - it.lastCacheTime > expirationTime }
+        return projectsDatabase.configDao().getConfig()
+                .onErrorReturn { Config(lastCacheTime = 0) }
+                .map {
+                    currentTime - it.lastCacheTime > expirationTime
+                }
     }
 }
