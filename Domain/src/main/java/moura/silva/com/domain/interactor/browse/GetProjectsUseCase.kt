@@ -7,10 +7,10 @@ import moura.silva.com.domain.model.Project
 import moura.silva.com.domain.repository.ProjectRepository
 import javax.inject.Inject
 
-class GetProjects @Inject constructor(
+class GetProjectsUseCase @Inject constructor(
         private val projectRepository : ProjectRepository,
         postExecutionThread: PostExecutionThread)
-    : ObservableUseCase<List<Project>, Nothing>(postExecutionThread){
+    : ObservableUseCase<List<Project>, Nothing?>(postExecutionThread){
 
 
     override fun buildUseCaseObservable(params: Nothing?): Observable<List<Project>> {

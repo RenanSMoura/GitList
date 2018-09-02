@@ -13,14 +13,14 @@ import org.mockito.MockitoAnnotations
 
 class GetProjectsTest{
 
-    private lateinit var getProjects: GetProjects
+    private lateinit var getProjects: GetProjectsUseCase
     @Mock lateinit var projectsRepository: ProjectRepository
     @Mock lateinit var postExecutionThread: PostExecutionThread
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        getProjects = GetProjects(projectsRepository, postExecutionThread)
+        getProjects = GetProjectsUseCase(projectsRepository, postExecutionThread)
     }
 
     @Test

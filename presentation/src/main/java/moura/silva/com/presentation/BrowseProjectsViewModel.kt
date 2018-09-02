@@ -7,7 +7,7 @@ import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableObserver
 import moura.silva.com.domain.interactor.bookmark.BookmarkProject
 import moura.silva.com.domain.interactor.bookmark.UnbookmarkProject
-import moura.silva.com.domain.interactor.browse.GetProjects
+import moura.silva.com.domain.interactor.browse.GetProjectsUseCase
 import moura.silva.com.domain.model.Project
 import moura.silva.com.presentation.mapper.ProjectViewMapper
 import moura.silva.com.presentation.model.ProjectView
@@ -16,7 +16,7 @@ import moura.silva.com.presentation.state.ResourceState
 import javax.inject.Inject
 
 class BrowseProjectsViewModel @Inject constructor(
-        private val getProjects: GetProjects,
+        private val getProjectsUseCase: GetProjectsUseCase,
         private val bookmarkProject: BookmarkProject,
         private val unbookmarkProject: UnbookmarkProject,
         private val mapper: ProjectViewMapper
@@ -25,7 +25,7 @@ class BrowseProjectsViewModel @Inject constructor(
     private val liveData: MutableLiveData<Resource<List<ProjectView>>> = MutableLiveData()
 
     override fun onCleared() {
-        getProjects.dispose()
+        getProjectsUseCase.dispose()
         super.onCleared()
     }
 
@@ -36,7 +36,7 @@ class BrowseProjectsViewModel @Inject constructor(
 
     fun fetchProjects() {
         liveData.postValue(Resource(ResourceState.LOADING,null,null))
-        return getProjects.execute(ProjectsSubscriber())
+        return getProjectsUseCase.execute(ProjectsSubscriber())
     }
 
     fun bookmarkProject(projectId : String){
